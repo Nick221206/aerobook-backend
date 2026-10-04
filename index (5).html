@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="AeroBook – search flights, pick your exact seat and print your boarding pass.">
+<title>AeroBook – Pick a sky. Print a pass.</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#0a0e14;--card:#131a24;--fg:#e9eef5;--mut:#7d8aa0;--acc:#ffb000;--bd:#243044;--paper:#f6efe0;--ink:#1b1a17}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e9e4d6;--card:#fbf7ec;--fg:#1b1a17;--mut:#6f6a5c;--acc:#c46a00;--bd:#d6cfba}}
+:root[data-theme="light"]{--bg:#e9e4d6;--card:#fbf7ec;--fg:#1b1a17;--mut:#6f6a5c;--acc:#c46a00;--bd:#d6cfba}
+html{scroll-behavior:smooth;scroll-padding-top:70px}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,monospace;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.w{max-width:1040px;margin:0 auto;padding:0 18px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px dashed var(--bd)}
+nav .w{display:flex;align-items:center;gap:8px;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
+.logo{font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-right:auto}.logo span{color:var(--acc)}
+.links{display:flex;gap:4px;align-items:center}.links a{padding:6px 12px;color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:1px}.links a:hover{color:var(--acc)}
+.btn{display:inline-block;background:var(--acc);color:#14100a;border-radius:4px;padding:12px 22px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+.btn.alt{background:none;color:var(--fg);border:1px solid var(--bd)}.btn:hover{filter:brightness(1.1)}
+.ham{display:none;background:none;border:1px solid var(--bd);color:var(--fg);border-radius:4px;padding:4px 12px;font-size:18px;cursor:pointer}
+@media(max-width:860px){.ham{display:block}.links{display:none;width:100%;flex-direction:column;align-items:stretch}.links.open{display:flex}.links a{padding:12px 6px;border-top:1px dashed var(--bd)}}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:56px 0 40px}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-top:34px}}
+.eyebrow{color:var(--acc);letter-spacing:4px;font-size:12px}
+h1{font-size:clamp(40px,8.5vw,84px);line-height:.98;letter-spacing:-3px;text-transform:uppercase;margin:10px 0 16px}h1 em{font-style:normal;color:var(--acc)}
+.lead{color:var(--mut);max-width:480px;margin:0 0 24px}.cta{display:flex;gap:12px;flex-wrap:wrap}
+.pass{display:flex;background:var(--paper);color:var(--ink);border-radius:16px;overflow:hidden;filter:drop-shadow(0 14px 28px rgba(0,0,0,.45));transform:rotate(-3deg);animation:fl 5s ease-in-out infinite;flex-wrap:wrap}
+@keyframes fl{50%{transform:rotate(-1deg) translateY(-10px)}}
+.pm{flex:1 1 230px;padding:18px 20px}.pm small,.stub small{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7b7566;display:block}
+.pr{font-size:36px;font-weight:700;letter-spacing:-1px;margin:2px 0 12px;display:flex;gap:12px;align-items:center}.pr span{color:#c46a00;font-size:20px}
+.pg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pg b{font-size:14px}
+.stub{flex:0 0 120px;padding:18px 12px;border-left:2px dashed #b9b09a;text-align:center;position:relative}.sn{font-size:38px;font-weight:700}
+.stub:before,.stub:after{content:"";position:absolute;left:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg)}.stub:before{top:-10px}.stub:after{bottom:-10px}
+.bar{height:44px;margin-top:8px;background:repeating-linear-gradient(90deg,#1b1a17 0 2px,transparent 2px 4px,#1b1a17 4px 5px,transparent 5px 8px,#1b1a17 8px 11px,transparent 11px 13px)}
+.tick{border-block:1px dashed var(--bd);overflow:hidden;white-space:nowrap;padding:10px 0;background:#05070a;color:var(--acc);font-size:13px;letter-spacing:2px}
+.tick div{display:inline-block;animation:mq 30s linear infinite}.tick span{margin:0 22px}@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:60px 0}h2{font-size:clamp(26px,5vw,40px);letter-spacing:-1px;text-transform:uppercase;margin:6px 0 24px;line-height:1.05}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:18px}.c b{display:block;margin-bottom:4px}.c p{margin:0;color:var(--mut);font-size:14px}
+.n{color:var(--acc);font-size:34px;font-weight:700;line-height:1}
+.dest{display:block;transition:.2s}.dest:hover{border-color:var(--acc);transform:translateY(-3px)}.dest .code{color:var(--acc);letter-spacing:3px;font-size:12px}.dest .city{font-size:24px;font-weight:700;margin:4px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;text-align:center}.stats .n{font-size:44px}
+.band{text-align:center;border:1px dashed var(--acc);border-radius:12px;padding:44px 18px}
+.tag{font-size:11px;padding:1px 8px;border:1px solid var(--bd);border-radius:3px;color:var(--mut);vertical-align:middle}
+footer{border-top:1px dashed var(--bd);padding:26px 18px;text-align:center;color:var(--mut);font-size:12px}
+@media(prefers-reduced-motion:reduce){.pass,.tick div{animation:none}html{scroll-behavior:auto}}
+</style></head><body>
+<nav><div class="w"><a class="logo" href="#top">Aero<span>Book</span></a>
+<button class="ham" id="ham" aria-label="Menu" aria-expanded="false">☰</button>
+<div class="links" id="links"><a href="#how">How it works</a><a href="#features">Features</a><a href="#dest">Destinations</a><a href="#reviews">Reviews</a><a class="btn" style="margin-left:6px;color:#14100a" href="app.html">Book now</a></div></div></nav>
+
+<header class="w hero" id="top"><div>
+<div class="eyebrow">✈ TERMINAL 1 · NOW BOARDING</div>
+<h1>Pick a sky.<br><em>Print a pass.</em></h1>
+<p class="lead">Search flights, choose your exact seat on a live aircraft map, and get your boarding pass in minutes. No counters, no queues.</p>
+<div class="cta"><a class="btn" href="app.html">Book a flight</a><a class="btn alt" href="#how">See how it works</a></div></div>
+<div class="pass" aria-hidden="true"><div class="pm"><small>Boarding pass · IndiGo</small><div class="pr">BOM<span>✈</span>DEL</div>
+<div class="pg"><div><small>Passenger</small><b>A. SHARMA</b></div><div><small>Gate</small><b>B4</b></div><div><small>Boarding</small><b>06:40</b></div><div><small>Class</small><b>Business</b></div></div></div>
+<div class="stub"><small>Seat</small><div class="sn">7A</div><small>AB7K2Q</small><div class="bar"></div></div></div></header>
+
+<div class="tick" aria-hidden="true"><div><span>BOM → DEL 06:40 ON TIME</span><span>DEL → BLR 08:15 BOARDING</span><span>BLR → GOI 09:30 ON TIME</span><span>HYD → MAA 11:05 ON TIME</span><span>GOI → BOM 12:20 DELAYED</span><span>MAA → BLR 14:00 ON TIME</span>
+<span>BOM → DEL 06:40 ON TIME</span><span>DEL → BLR 08:15 BOARDING</span><span>BLR → GOI 09:30 ON TIME</span><span>HYD → MAA 11:05 ON TIME</span><span>GOI → BOM 12:20 DELAYED</span><span>MAA → BLR 14:00 ON TIME</span></div></div>
+
+<section id="how"><div class="w"><div class="eyebrow">HOW IT WORKS</div><h2>Four steps to take off</h2>
+<div class="g"><div class="c"><div class="n">01</div><b>Search</b><p>Choose route, date and passengers. Filter by price and airline.</p></div>
+<div class="c"><div class="n">02</div><b>Pick seats</b><p>Tap free seats in First, Business or Economy on the live cabin map.</p></div>
+<div class="c"><div class="n">03</div><b>Add passengers</b><p>Names, age, baggage and meal for every traveller.</p></div>
+<div class="c"><div class="n">04</div><b>Get your pass</b><p>Confirm and receive a booking reference and boarding pass.</p></div></div></div></section>
+
+<section id="features" style="padding-top:0"><div class="w"><div class="eyebrow">FEATURES</div><h2>Built to be trusted</h2>
+<div class="g"><div class="c"><b>Live seat map</b><p>See which seats are taken before you choose.</p></div>
+<div class="c"><b>No double bookings</b><p>Seats are reserved atomically, so two people can never share one.</p></div>
+<div class="c"><b>Safe retries</b><p>Tapping confirm twice never creates two bookings.</p></div>
+<div class="c"><b>Clear pricing</b><p>Fare = base × class + baggage, shown before you confirm.</p></div>
+<div class="c"><b>Secure login</b><p>Passwords are hashed and sessions use JWT tokens.</p></div>
+<div class="c"><b>Works on any screen</b><p>Phone, tablet or desktop, with a simple mobile menu.</p></div></div></div></section>
+
+<section id="dest" style="padding-top:0"><div class="w"><div class="eyebrow">POPULAR ROUTES</div><h2>Where to next?</h2>
+<div class="g"><a class="c dest" href="app.html"><div class="code">GOI</div><div class="city">Goa</div><p>Beaches &amp; nightlife</p></a>
+<a class="c dest" href="app.html"><div class="code">DEL</div><div class="city">Delhi</div><p>History &amp; street food</p></a>
+<a class="c dest" href="app.html"><div class="code">BOM</div><div class="city">Mumbai</div><p>The city that never sleeps</p></a>
+<a class="c dest" href="app.html"><div class="code">BLR</div><div class="city">Bengaluru</div><p>Gardens &amp; start-ups</p></a></div></div></section>
+
+<section style="padding-top:0"><div class="w stats"><div><div class="n">6</div>airports</div><div><div class="n">4</div>airlines</div><div><div class="n">90+</div>flights</div><div><div class="n">3</div>cabin classes</div></div></section>
+
+<section id="reviews"><div class="w"><div class="eyebrow">REVIEWS <span class="tag">sample feedback</span></div><h2>Travellers say</h2>
+<div class="g"><div class="c"><p>“Booking took under two minutes.”</p><b style="margin-top:10px">Aarav, Pune</b></div><div class="c"><p>“The seat map made choosing easy.”</p><b style="margin-top:10px">Meera, Delhi</b></div><div class="c"><p>“Clean and simple to use.”</p><b style="margin-top:10px">Kabir, Goa</b></div></div></div></section>
+
+<section style="padding-top:0"><div class="w"><div class="band"><h2 style="margin-top:0">Ready for take-off?</h2><p class="lead" style="margin:0 auto 20px">Create an account and book your first flight today.</p><a class="btn" href="app.html">Start booking</a></div></div></section>
+<footer>© AeroBook · B.Sc. project · Demo only – no real payments · <a href="app.html" style="color:var(--acc)">Open the app</a></footer>
+<script>
+const h=document.getElementById('ham'),l=document.getElementById('links');
+h.onclick=()=>{const o=l.classList.toggle('open');h.textContent=o?'✕':'☰';h.setAttribute('aria-expanded',o)};
+l.querySelectorAll('a').forEach(a=>a.onclick=()=>{l.classList.remove('open');h.textContent='☰'});
+</script></body></html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AEROBOOK – Airport Ticket Booking</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#0a0e14;--card:#131a24;--fg:#e9eef5;--mut:#7d8aa0;--acc:#ffb000;--acc2:#ffb000;--ok:#39d98a;--bd:#243044;--occ:#2a3446;--paper:#f6efe0;--ink:#1b1a17}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e9e4d6;--card:#fbf7ec;--fg:#1b1a17;--mut:#6f6a5c;--acc:#c46a00;--acc2:#c46a00;--ok:#1a8f55;--bd:#d6cfba;--occ:#cfc8b3}}
+:root[data-theme="light"]{--bg:#e9e4d6;--card:#fbf7ec;--fg:#1b1a17;--mut:#6f6a5c;--acc:#c46a00;--acc2:#c46a00;--ok:#1a8f55;--bd:#d6cfba;--occ:#cfc8b3}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:10px 16px;background:var(--bg);border-bottom:1px dashed var(--bd)}
+nav b{margin-right:auto;cursor:pointer;letter-spacing:4px;text-transform:uppercase}nav b span{color:var(--acc)}
+button,select,input{font:inherit;color:inherit}
+.lk{background:none;border:0;padding:6px 10px;cursor:pointer;color:var(--mut);text-transform:uppercase;font-size:12px;letter-spacing:1px}.lk:hover{color:var(--acc)}
+.btn{background:var(--acc);color:#14100a;border:0;border-radius:4px;padding:10px 18px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-size:13px}.btn.alt{background:transparent;color:var(--fg);border:1px solid var(--bd)}.btn.sm{padding:5px 10px;font-size:11px}.btn.red{background:#e0525c;color:#fff}.btn:disabled{opacity:.5}
+main{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+.hero{padding:30px 0 10px}.hero small{color:var(--acc);letter-spacing:4px;font-size:12px}
+.hero h1{margin:6px 0 8px;font-size:clamp(34px,8vw,72px);line-height:1;letter-spacing:-2px;text-transform:uppercase}.hero p{margin:0 0 20px;color:var(--mut);max-width:520px}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:block;font-size:10px;color:var(--mut);margin-bottom:3px;text-transform:uppercase;letter-spacing:2px}
+input,select{width:100%;padding:10px;border-radius:4px;border:1px solid var(--bd);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:16px;margin:12px 0}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mut{color:var(--mut)}.big{font-size:22px;font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{background:none;border:1px dashed var(--mut);color:var(--fg);border-radius:99px;padding:5px 12px;cursor:pointer}.chip:hover{border-color:var(--acc);color:var(--acc)}
+.sheet{border:1px solid var(--bd);border-radius:8px;padding:18px;background:var(--card);box-shadow:0 0 0 6px var(--bg),0 0 0 7px var(--bd)}
+.steps{display:flex;gap:4px;margin:8px 0}.steps div{flex:1;text-align:center;padding:6px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);border-bottom:3px solid var(--bd)}.steps .on{color:var(--acc);border-color:var(--acc)}
+.cab{max-width:300px;margin:14px auto;padding:56px 18px 30px;border:2px solid var(--mut);border-radius:150px 150px 24px 24px / 110px 110px 24px 24px;background:var(--bg);position:relative}
+.cab:before{content:"COCKPIT";position:absolute;top:22px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:4px;color:var(--mut)}
+.cab .sep{text-align:center;font-size:10px;letter-spacing:3px;color:var(--mut);margin:10px 0 4px;border-top:1px dashed var(--bd);padding-top:6px}
+.sr{display:flex;gap:5px;justify-content:center;align-items:center;margin:4px 0}.sr i{width:18px;font-size:10px;color:var(--mut);text-align:center;font-style:normal}
+.seat{width:30px;height:32px;border-radius:7px 7px 3px 3px;border:2px solid;font-size:10px;cursor:pointer;background:var(--card)}
+.seat.First{border-color:#ffb000}.seat.Business{border-color:#b388ff}.seat.Economy{border-color:#5fb4ff}
+.seat.sel{background:var(--ok);border-color:var(--ok);color:#06140c}.seat:disabled{background:var(--occ);border-color:var(--occ);cursor:not-allowed;color:var(--mut)}
+.gap{width:16px}.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);justify-content:center}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl td,.tbl th{padding:8px;border-bottom:1px solid var(--bd);text-align:left}.tbl th{color:var(--mut);font-weight:400;text-transform:uppercase;font-size:10px;letter-spacing:2px}
+.tw{overflow-x:auto}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stats .card{margin:0}
+.err{color:#ff7a85;font-size:13px;margin:6px 0}.tag{font-size:11px;padding:1px 8px;border:1px solid var(--bd);border-radius:3px}
+.board{background:#05070a;border:1px solid var(--bd);border-radius:8px;padding:6px 14px;margin-top:10px}
+.bh,.br{display:grid;grid-template-columns:90px 1fr 70px 60px 90px auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #1a2230}
+.bh{font-size:10px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;padding:8px 0}.br:last-child{border:0}
+.fp{display:inline-block;background:#111823;color:#ffb000;padding:2px 3px;margin:0 1px;border-radius:3px;font-weight:700;animation:fl .5s both;transform-origin:50% 50%}
+@keyframes fl{0%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
+.st-ok{color:#39d98a}.st-bd{color:#ffb000;animation:bl 1s infinite}.st-dl{color:#ff7a85}@keyframes bl{50%{opacity:.3}}
+@media(max-width:680px){.bh{display:none}.br{grid-template-columns:1fr 1fr}}
+.pass{display:flex;margin:14px 0;background:var(--paper);color:var(--ink);border-radius:14px;overflow:hidden;position:relative;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));flex-wrap:wrap}
+.pm{flex:1 1 360px;padding:18px 20px}.pm small,.stub small{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7b7566;display:block}
+.pr{display:flex;align-items:center;gap:14px;font-size:38px;font-weight:700;letter-spacing:-1px;margin:4px 0 12px}.pr span{font-size:22px;color:#c46a00}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pg b{font-size:15px}
+.stub{flex:0 0 150px;padding:18px;border-left:2px dashed #b9b09a;text-align:center;position:relative}.stub .sn{font-size:40px;font-weight:700}
+.stub:before,.stub:after{content:"";position:absolute;left:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg)}.stub:before{top:-10px}.stub:after{bottom:-10px}
+.bar{height:46px;margin-top:8px;background:repeating-linear-gradient(90deg,#1b1a17 0 2px,transparent 2px 4px,#1b1a17 4px 5px,transparent 5px 8px,#1b1a17 8px 11px,transparent 11px 13px)}
+@media(max-width:560px){.stub{flex:1 1 100%;border-left:0;border-top:2px dashed #b9b09a}.stub:before{top:-10px;left:-10px}.stub:after{bottom:auto;top:-10px;left:auto;right:-10px}.pg{grid-template-columns:repeat(2,1fr)}}
+.ref{font-size:12px;letter-spacing:3px;color:var(--acc)}
+.links{display:flex;gap:4px;align-items:center;flex-wrap:wrap}.ham{display:none;background:none;border:1px solid var(--bd);color:var(--fg);border-radius:4px;padding:4px 12px;font-size:18px;cursor:pointer}
+@media(max-width:1000px){.ham{display:block}.links{display:none;width:100%;flex-direction:column;align-items:stretch;padding:6px 0}.links.open{display:flex}.links .lk,.links .btn{text-align:left;padding:12px 10px;border-top:1px dashed var(--bd);border-radius:0}}
+</style></head><body>
+<nav id="nav"></nav><main id="app"></main><footer style="border-top:1px dashed var(--bd);padding:18px 16px;text-align:center;color:var(--mut);font-size:12px">© AeroBook · B.Sc. project · Demo only – no real payments</footer>
+<script>
+const $=s=>document.querySelector(s);
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const tm=m=>String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const du=m=>Math.floor(m/60)+'h '+m%60+'m';
+const AP={BOM:'Mumbai',DEL:'Delhi',BLR:'Bengaluru',HYD:'Hyderabad',MAA:'Chennai',GOI:'Goa'};
+const AL=['IndiGo','Air India','Akasa Air','SpiceJet'];
+const MULT={Economy:1,Business:2.2,First:3.5},BAG=40;
+const ROWS=[];for(let r=1;r<=14;r++)ROWS.push({r,cls:r<=2?'First':r<=5?'Business':'Economy',cols:r<=5?['A','B','','C','D']:['A','B','C','','D','E','F']});
+const allSeats=()=>ROWS.flatMap(x=>x.cols.filter(c=>c).map(c=>x.r+c));
+const clsOf=id=>ROWS[parseInt(id)-1].cls;
+const API=window.AEROBOOK_API||'https://aerobook-backend.onrender.com'; // <-- set to your Render URL after deploying the backend
+const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
+const api=async(p,o={})=>{let r;try{r=await fetch(API+p,{method:o.method||'GET',headers:{'Content-Type':'application/json',...(S.token?{Authorization:'Bearer '+S.token}:{}),...(o.headers||{})},body:o.body?JSON.stringify(o.body):undefined})}catch(e){throw new Error('Cannot reach the server. Try again.')}
+ const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||'Request failed'),{status:r.status});return j};
+let S={user:null,token:null,view:'home',q:null,fl:{max:'',air:'',sort:'cheap'},flight:null,step:1,sel:[],pax:[],ref:null,err:'',mode:'login',edit:null,log:[],sent:false,menu:false,busy:false,flights:[],bookings:[]};
+try{const d=JSON.parse(localStorage.getItem('aerobook')||'null');if(d&&d.token){S.token=d.token;S.user=d.user}}catch(e){}
+const save=()=>{try{localStorage.setItem('aerobook',JSON.stringify({token:S.token,user:S.user}))}catch(e){}};
+const go=async(v,keep)=>{S.menu=false;if(!keep)S.err='';
+ try{if(v==='mine'&&S.user)S.bookings=await api('/api/bookings/mine');
+  if(v==='admin'&&S.user&&S.user.admin)[S.flights,S.bookings,S.log]=await Promise.all([api('/api/admin/flights'),api('/api/admin/bookings'),api('/api/admin/log')])}
+ catch(e){S.err=e.message;if(e.status===401){S.token=null;S.user=null;save();v='auth';S.mode='login'}}
+ S.view=v;render();window.scrollTo(0,0)};
+function nav(){const L=(v,t)=>`<button class=lk onclick="go('${v}')">${t}</button>`;
+ $('#nav').innerHTML=`<b onclick="go('home')">Aero<span>Book</span></b><button class=ham aria-label="Menu" aria-expanded="${S.menu}" onclick="S.menu=!S.menu;nav()">${S.menu?'✕':'☰'}</button><div class="links ${S.menu?'open':''}">${L('home','Home')}${L('about','About')}${L('contact','Contact')}${L('faq','FAQ')}`+
+ (S.user?L('mine','My bookings')+L('profile','Profile')+(S.user.admin?L('admin','Admin'):'')+`<button class=lk onclick="logout()">Logout (${S.user.name})</button>`:`<button class=lk onclick="S.mode='login';go('auth')">Login</button><button class="btn sm" onclick="S.mode='signup';go('auth')">Sign up</button>`)+`</div>`}
+function render(){nav();const v={home,results,auth,book,mine,admin,about,contact,faq,profile}[S.view];$('#app').innerHTML=v();if(S.view==='faq')faqL();if(S.view==='results')list();if(S.view==='admin'&&S.user&&S.user.admin){adminL();adminB()}}
+const opts=(sel)=>Object.entries(AP).map(([c,n])=>`<option value=${c} ${c===sel?'selected':''}>${n} (${c})</option>`).join('');
+function home(){const t=new Date().toISOString().slice(0,10),q=S.q||{o:'BOM',d:'DEL',date:t,n:1};
+ return `<div class=hero><small>✈ TERMINAL 1 · DEPARTURES</small><h1>Pick a sky.<br>Print a pass.</h1><p>Read the departure board, choose your seat on the real fuselage, and walk away with a boarding pass.</p>
+ <div class=f><div><label>From</label><select id=o>${opts(q.o)}</select></div><div><label>To</label><select id=d>${opts(q.d)}</select></div>
+ <div><label>Date</label><input type=date id=dt min="${t}" value="${q.date}"></div><div><label>Passengers</label><input type=number id=n min=1 max=6 value="${q.n}"></div></div>
+ <div class=err>${S.err}</div><button class=btn style="margin-top:8px" onclick="search()">Search flights</button>
+ <div class=chips>${[['BOM','DEL'],['DEL','BLR'],['BLR','GOI'],['HYD','MAA']].map(r=>`<button class=chip onclick="quick('${r[0]}','${r[1]}')">${r[0]} → ${r[1]}</button>`).join('')}</div></div>
+ <div class=big style="margin:26px 0 4px">Popular destinations</div><div class=f>${[['GOI','Goa','Beaches & nightlife'],['DEL','Delhi','History & street food'],['BOM','Mumbai','The city that never sleeps'],['BLR','Bengaluru','Gardens & start-ups']].map(c=>`<div class=card style="cursor:pointer;margin:6px 0" onclick="pick('${c[0]}')"><div class=big>${c[1]}</div><span class=mut>${c[2]}</span><div class=ref>${c[0]}</div></div>`).join('')}</div>
+ <div class=big style="margin:26px 0 4px">Why AeroBook</div><div class=f>${[['Live seat map','See exactly which seats are free.'],['Clear pricing','Fare = base × class + baggage. No surprises.'],['Instant reference','Confirm and get your booking reference at once.']].map(c=>`<div class=card style="margin:6px 0"><b>${c[0]}</b><p class=mut style="margin:4px 0 0">${c[1]}</p></div>`).join('')}</div>
+ <div class=big style="margin:26px 0 4px">What travellers say <span class=tag>sample feedback</span></div><div class=f>${[['Booking took under two minutes.','Aarav, Pune'],['The seat map made choosing easy.','Meera, Delhi'],['Clean and simple to use.','Kabir, Goa']].map(c=>`<div class=card style="margin:6px 0">“${c[0]}”<div class=mut style="margin-top:6px">— ${c[1]}</div></div>`).join('')}</div>`}
+function quick(o,d){$('#o').value=o;$('#d').value=d;search()}
+async function search(){const o=$('#o').value,d=$('#d').value,date=$('#dt').value,n=+$('#n').value;
+ if(o===d||!date||!(n>=1&&n<=6)){S.err='Pick different cities, a date and 1–6 passengers.';return render()}
+ S.q={o,d,date,n};S.fl={max:'',air:'',sort:'cheap'};try{S.flights=await api('/api/flights?o='+o+'&d='+d)}catch(e){S.err=e.message;return render()}go('results')}
+function results(){const q=S.q;return `<div class=row><div><div class=big>${AP[q.o]} → ${AP[q.d]}</div><span class=mut>${q.date} · ${q.n} passenger(s)</span></div><button class="btn alt sm" onclick="go('home')">Change search</button></div>
+ <div class=card><div class=f><div><label>Max price (₹)</label><input type=number id=fm placeholder="No limit" oninput="S.fl.max=this.value;list()" value="${S.fl.max}"></div>
+ <div><label>Airline</label><select onchange="S.fl.air=this.value;list()"><option value="">All</option>${AL.map(a=>`<option ${S.fl.air===a?'selected':''}>${a}</option>`).join('')}</select></div>
+ <div><label>Sort by</label><select onchange="S.fl.sort=this.value;list()">${[['cheap','Cheapest'],['early','Earliest'],['fast','Fastest']].map(s=>`<option value=${s[0]} ${S.fl.sort===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select></div></div></div><div id=list></div>`}
+const gate=id=>'ABCD'[id%4]+(id%18+1);
+const flap=t=>[...String(t)].map((c,i)=>`<span class=fp style="animation-delay:${i*35}ms">${c===' '?'&nbsp;':c}</span>`).join('');
+const stat=id=>id%7===0?['DELAYED','st-dl']:id%3===0?['BOARDING','st-bd']:['ON TIME','st-ok'];
+function pass(b,i){const p=b.pax[i],[o,d]=b.route.split('→');return `<div class=pass><div class=pm><small>Boarding pass · ${b.al}</small><div class=pr>${o}<span>✈</span>${d}</div><div class=pg><div><small>Passenger</small><b>${p.name.toUpperCase()}</b></div><div><small>Date</small><b>${b.date}</b></div><div><small>Boarding</small><b>${tm(b.dep-40)}</b></div><div><small>Gate</small><b>${gate(b.fid)}</b></div></div></div>
+<div class=stub><small>Seat</small><div class=sn>${b.seats[i]}</div><small>${clsOf(b.seats[i])} · ${b.ref}</small><div class=bar></div></div></div>`}
+function list(){const q=S.q,f=S.fl;let r=S.flights.filter(x=>x.o===q.o&&x.d===q.d&&(!f.max||x.price<=+f.max)&&(!f.air||x.al===f.air));
+ r.sort((a,b)=>f.sort==='cheap'?a.price-b.price:f.sort==='early'?a.dep-b.dep:a.dur-b.dur);
+ $('#list').innerHTML=r.length?`<div class=board><div class=bh><span>Time</span><span>Destination</span><span>Flight</span><span>Gate</span><span>Status</span><span>Fare</span></div>`+r.map(x=>{const t=stat(x.id);return `<div class=br><span>${flap(tm(x.dep))}</span><span>${flap(AP[x.d].toUpperCase())}<div class=mut style="font-size:11px;margin-top:4px">${x.al} · ${du(x.dur)} · ${allSeats().length-x.occ.length} seats</div></span><span>${flap('AB'+x.id)}</span><span>${flap(gate(x.id))}</span><span class="${t[1]}">${t[0]}</span><span><b>${inr(x.price)}</b> <button class="btn sm" onclick="start(${x.id})">Book Now</button></span></div>`}).join('')+'</div>':`<div class="card mut">No departures match. Loosen the filters.</div>`}
+async function start(id){if(!S.user){S.mode='login';S.err='Please log in to book.';S.pending=id;return go('auth',1)}
+ try{S.flight=await api('/api/flights/'+id)}catch(e){S.err=e.message;return go('results',1)}S.step=1;S.sel=[];S.pax=[];S.idem=null;go('book')}
+function auth(){const s=S.mode==='signup';return `<div class=card style="max-width:380px;margin:30px auto"><div class=big>${s?'Create account':'Welcome back'}</div>
+ ${s?`<label style="margin-top:10px">Full name</label><input id=an>`:''}<label style="margin-top:10px">Email</label><input id=ae type=email><label style="margin-top:10px">Password</label><input id=ap type=password>
+ <div class=err>${S.err}</div><button class=btn onclick="doAuth()">${s?'Sign up':'Log in'}</button>
+ <p class=mut>${s?'Have an account?':'New here?'} <a href=# onclick="S.mode='${s?'login':'signup'}';go('auth');return false">${s?'Log in':'Sign up'}</a></p></div>`}
+async function doAuth(){const e=$('#ae').value.trim().toLowerCase(),p=$('#ap').value,su=S.mode==='signup';
+ if(!/^\S+@\S+\.\S+$/.test(e)||p.length<6){S.err='Enter a valid email and a password of 6+ characters.';return render()}
+ try{const j=await api('/api/auth/'+S.mode,{method:'POST',body:{name:su?$('#an').value.trim():undefined,email:e,password:p}});S.token=j.token;S.user=j.user;save()}catch(x){S.err=x.message;return render()}
+ if(S.pending){const id=S.pending;S.pending=null;return start(id)}go('home')}
+function logout(){S.token=null;S.user=null;save();go('home')}
+function book(){const f=S.flight,n=S.q?S.q.n:1;
+ const head=`<div class=row><div><div class=big>${AP[f.o]} → ${AP[f.d]}</div><span class=mut>${f.al} · ${tm(f.dep)} · ${S.q?S.q.date:''} · base ${inr(f.price)}</span></div></div>
+ <div class=steps>${['Seats','Passengers','Review','Done'].map((s,i)=>`<div class="${S.step===i+1?'on':''}">${i+1}. ${s}</div>`).join('')}</div>`;
+ if(S.step===1)return head+`<div class=card><p class=mut style="margin-top:0">Select ${n} seat(s) · ${S.sel.length} chosen</p><div class=leg><span>First ×3.5</span><span>Business ×2.2</span><span>Economy ×1</span><span>Grey = taken</span><span>Green = yours</span></div>
+ <div class=cab>${ROWS.map(r=>`${r.r===1?'<div class=sep>FIRST</div>':r.r===3?'<div class=sep>BUSINESS</div>':r.r===6?'<div class=sep>ECONOMY</div>':''}<div class=sr><i>${r.r}</i>${r.cols.map(c=>{if(!c)return'<span class=gap></span>';const id=r.r+c;return `<button class="seat ${r.cls} ${S.sel.includes(id)?'sel':''}" ${f.occ.includes(id)?'disabled':''} onclick="seat('${id}')">${c}</button>`}).join('')}</div>`).join('')}</div>
+ <div class=err>${S.err}</div><div class=row><span>Subtotal <b>${inr(S.sel.reduce((a,s)=>a+f.price*MULT[clsOf(s)],0))}</b></span><button class=btn onclick="next()">Next: passengers</button></div></div>`;
+ if(S.step===2)return head+S.sel.map((s,i)=>{const p=S.pax[i];return `<div class=card><b>Passenger ${i+1}</b> <span class=tag>Seat ${s} · ${clsOf(s)}</span><div class=f style="margin-top:8px">
+ <div><label>Full name</label><input value="${p.name}" oninput="S.pax[${i}].name=this.value"></div><div><label>Age</label><input type=number min=0 max=120 value="${p.age}" oninput="S.pax[${i}].age=this.value"></div>
+ <div><label>Extra baggage</label><select onchange="S.pax[${i}].bag=+this.value">${[0,10,20,30].map(k=>`<option value=${k} ${p.bag===k?'selected':''}>${k?'+'+k+' kg (₹'+k*BAG+')':'None'}</option>`).join('')}</select></div>
+ <div><label>Meal</label><select onchange="S.pax[${i}].meal=this.value">${['Veg','Non-veg','None'].map(m=>`<option ${p.meal===m?'selected':''}>${m}</option>`).join('')}</select></div></div></div>`}).join('')+
+ `<div class=err>${S.err}</div><div class=row><button class="btn alt" onclick="S.step=1;render()">Back</button><button class=btn onclick="next()">Next: review</button></div>`;
+ if(S.step===3){const t=total();return head+`<div class=card><table class=tbl><tr><th>Passenger</th><th>Seat</th><th>Meal</th><th>Fare</th></tr>${S.sel.map((s,i)=>{const p=S.pax[i];return `<tr><td>${p.name}, ${p.age}</td><td>${s} (${clsOf(s)})</td><td>${p.meal}</td><td>${inr(f.price*MULT[clsOf(s)]+p.bag*BAG)}</td></tr>`}).join('')}</table>
+ <div class=row style="margin-top:12px"><span class=big>Total ${inr(t)}</span><span><button class="btn alt" onclick="S.step=2;render()">Back</button> <button class=btn onclick="confirmB()">Confirm booking</button></span></div><p class=mut style="margin-bottom:0">Demo only – no payment is taken.</p><div class=err>${S.err}</div></div>`}
+ {const b=S.last;return `<div class=ref>BOOKING ${S.ref} · CONFIRMED</div><div class=big style="margin:6px 0">Your boarding passes</div>${b.seats.map((_,k)=>pass(b,k)).join('')}<button class=btn onclick="go('mine')">My bookings</button> <button class="btn alt" onclick="go('home')">New search</button>`}}
+function seat(id){const n=S.q?S.q.n:1,i=S.sel.indexOf(id);if(i>=0)S.sel.splice(i,1);else if(S.sel.length<n)S.sel.push(id);else{S.err=`You can pick only ${n} seat(s).`;return render()}S.err='';render()}
+const total=()=>S.sel.reduce((a,s,i)=>a+S.flight.price*MULT[clsOf(s)]+S.pax[i].bag*BAG,0);
+function next(){const n=S.q?S.q.n:1;
+ if(S.step===1){if(S.sel.length!==n){S.err=`Please select exactly ${n} seat(s).`;return render()}S.pax=S.sel.map((_,i)=>S.pax[i]||{name:'',age:'',bag:0,meal:'Veg'})}
+ if(S.step===2){if(S.pax.some(p=>p.name.trim().length<2||!(+p.age>=0&&p.age!==''&&+p.age<=120))){S.err='Enter a name and a valid age (0–120) for every passenger.';return render()}}
+ if(S.step===2)S.idem=uid();S.step++;S.err='';render()}
+async function confirmB(){if(S.busy)return;S.busy=true;S.err='';
+ try{const j=await api('/api/bookings',{method:'POST',headers:{'Idempotency-Key':S.idem},body:{flightId:S.flight.id,seats:S.sel,pax:S.pax,date:S.q?S.q.date:''}});S.last=j;S.ref=j.ref;S.step=4}
+ catch(e){S.err=e.message;if(e.status===401){S.busy=false;return logout()}if(e.status===409){try{S.flight=await api('/api/flights/'+S.flight.id)}catch(x){}S.step=1;S.sel=[]}}
+ S.busy=false;render()}
+function pick(c){$('#d').value=c;if($('#o').value===c)$('#o').value=c==='BOM'?'DEL':'BOM';window.scrollTo(0,0)}
+function about(){return `<div class=hero><small>ABOUT US</small><h1>Built for the journey.</h1></div><div class=card><b>Our story</b><p class=mut>AeroBook began as a Third Year B.Sc. project by a team of five. We wanted to replace slow, error-prone manual ticketing with one simple web system.</p></div>
+ <div class=f><div class=card style="margin:0"><b>Mission</b><p class=mut>Make flight booking quick, accurate and organised.</p></div><div class=card style="margin:0"><b>Vision</b><p class=mut>A trusted data foundation for smarter travel services.</p></div></div>
+ <div class=stats style="margin-top:12px">${[['Team members',5],['Airports',6],['Airlines',4],['Booking steps',4]].map(x=>`<div class=card><span class=mut>${x[0]}</span><div class=big>${x[1]}</div></div>`).join('')}</div>`}
+function contact(){if(S.sent)return `<div class=card><div class=big>Message sent</div><p class=mut>Thanks – our team will reply soon.</p><button class=btn onclick="S.sent=false;go('contact')">Send another</button></div>`;
+ return `<div class=big>Contact support</div><div class=f style="margin:10px 0"><div class=card style="margin:0"><b>Email</b><div class=mut>support@aerobook.example</div></div><div class=card style="margin:0"><b>Phone</b><div class=mut>[TO BE FILLED]</div></div><div class=card style="margin:0"><b>Hours</b><div class=mut>Mon–Sat, 9am–6pm</div></div></div>
+ <div class=card><label>Name</label><input id=cn><label style="margin-top:10px">Email</label><input id=ce type=email><label style="margin-top:10px">Message</label><textarea id=cm rows=4 style="width:100%;padding:10px;border-radius:4px;border:1px solid var(--bd);background:var(--card);color:var(--fg);font:inherit"></textarea><div class=err>${S.err}</div><button class=btn onclick="sendC()">Send</button></div>`}
+function sendC(){if($('#cn').value.trim().length<2||!/^\S+@\S+\.\S+$/.test($('#ce').value)||$('#cm').value.trim().length<5){S.err='Enter your name, a valid email and a message.';return render()}S.err='';S.sent=true;render()}
+const FAQ={'Booking':[['How do I book a flight?','Log in, search a route, press Book Now, choose seats, add passenger details, review and confirm.'],['Do I need an account?','Yes, booking and bookings history need a login.'],['Is payment taken?','No. This is a demo and no payment is processed.']],
+'Seats & Baggage':[['Can I pick my seat?','Yes. Grey seats are taken; choose any free seat in First, Business or Economy.'],['How is the price worked out?','Base fare × seat-class multiplier, plus extra baggage, for every passenger.'],['How much extra baggage can I add?','0, 10, 20 or 30 kg per passenger.']],
+'Account':[['How do I change my phone number?','Open Profile and update your details.'],['Where is my booking reference?','On the confirmation screen and under My bookings.']]};
+function faq(){return `<div class=big>Frequently asked questions</div><input id=fq placeholder="Search questions…" oninput="faqL()" style="margin:10px 0"><div id=fl2></div>`}
+function faqL(){const q=($('#fq')||{value:''}).value.toLowerCase();let h='';for(const[c,L]of Object.entries(FAQ)){const r=L.filter(x=>(x[0]+x[1]).toLowerCase().includes(q));if(r.length)h+=`<div class=mut style="margin:14px 0 4px;text-transform:uppercase;letter-spacing:2px;font-size:11px">${c}</div>`+r.map(x=>`<details class=card style="margin:6px 0"><summary style="cursor:pointer"><b>${x[0]}</b></summary><p class=mut style="margin:8px 0 0">${x[1]}</p></details>`).join('')}
+ $('#fl2').innerHTML=h||'<div class="card mut">No matching questions.</div>'}
+function profile(){if(!S.user)return'<div class=card>Please log in.</div>';const u=S.user;return `<div class=big>Your profile</div><div class=card style="max-width:420px"><label>Full name</label><input id=pn value="${u.name}"><label style="margin-top:10px">Email</label><input value="${u.email}" disabled><label style="margin-top:10px">Phone</label><input id=pp value="${u.phone||''}" placeholder="+91 …"><div class=err>${S.err}</div><button class=btn onclick="saveP()">Save</button> <button class="btn alt" onclick="logout()">Logout</button></div>`}
+async function saveP(){const n=$('#pn').value.trim(),p=$('#pp').value.trim();
+ if(n.length<2||(p&&!/^[0-9+\-\s]{7,15}$/.test(p))){S.err='Enter a name and a valid phone number.';return render()}
+ try{S.user=await api('/api/me',{method:'PUT',body:{name:n,phone:p}});save();S.err='Saved ✓';render();S.err=''}catch(e){S.err=e.message;render()}}
+function mine(){if(!S.user)return'<div class=card>Please log in.</div>';const b=S.bookings.filter(x=>x.email===S.user.email);
+ return `<div class=big>My boarding passes</div>`+(b.length?b.slice().reverse().map(x=>`<div class=ref style="margin-top:16px">${x.ref} · ${inr(x.total)}</div>`+x.seats.map((_,k)=>pass(x,k)).join('')).join(''):'<div class="card mut">No trips yet.</div>')}
+function admin(){if(!S.user||!S.user.admin)return'<div class=card>Admin access only. Log in with the admin account.</div>';
+ const rev=S.bookings.reduce((a,b)=>a+b.total,0),px=S.bookings.reduce((a,b)=>a+b.pax.length,0),e=S.edit||{o:'BOM',d:'DEL',al:AL[0],dep:480,dur:120,price:5000};
+ return `<div class=big>Admin dashboard</div><div class=stats style="margin:10px 0">${[['Bookings',S.bookings.length],['Revenue',inr(rev)],['Flights',S.flights.length],['Passengers',px]].map(s=>`<div class=card><span class=mut>${s[0]}</span><div class=big>${s[1]}</div></div>`).join('')}</div>
+ <div class=card><b>${S.edit?'Edit':'Add'} flight</b><div class=f style="margin-top:8px"><div><label>From</label><select id=fo>${opts(e.o)}</select></div><div><label>To</label><select id=fd>${opts(e.d)}</select></div>
+ <div><label>Airline</label><select id=fa>${AL.map(a=>`<option ${a===e.al?'selected':''}>${a}</option>`).join('')}</select></div><div><label>Departs</label><input id=ft type=time value="${tm(e.dep)}"></div>
+ <div><label>Duration (min)</label><input id=fu type=number value=${e.dur}></div><div><label>Base fare (₹)</label><input id=fp type=number value=${e.price}></div></div>
+ <div class=err>${S.err}</div><button class=btn onclick="saveF()">${S.edit?'Update':'Add flight'}</button> ${S.edit?'<button class="btn alt" onclick="S.edit=null;render()">Cancel</button>':''}</div>
+ <div class=card><div class=row><b>Flights</b><input id=sf placeholder="Search e.g. BOM or IndiGo" style="max-width:240px" oninput="adminL()"></div><div class=tw id=fl></div></div>
+ <div class=card><div class=row><b>Bookings</b><input id=sb placeholder="Search reference, email, name" style="max-width:240px" oninput="adminB()"></div><div class=tw id=bl></div></div><div class=card><b>System activity</b>${S.log.length?S.log.slice(0,8).map(l=>`<div class=mut style="font-size:12px;padding:3px 0">${l}</div>`).join(''):'<p class=mut>No activity yet.</p>'}</div>`}
+function adminL(){const q=($('#sf')||{value:''}).value.toLowerCase(),r=S.flights.filter(f=>(f.o+f.d+f.al+f.id).toLowerCase().includes(q)).slice(0,12);
+ $('#fl').innerHTML=`<table class=tbl><tr><th>ID</th><th>Route</th><th>Airline</th><th>Dep</th><th>Fare</th><th></th></tr>${r.map(f=>`<tr><td>AB${f.id}</td><td>${f.o}→${f.d}</td><td>${f.al}</td><td>${tm(f.dep)}</td><td>${inr(f.price)}</td><td><button class="btn alt sm" onclick="editF(${f.id})">Edit</button> <button class="btn red sm" onclick="delF(${f.id})">Delete</button></td></tr>`).join('')}</table><p class=mut>Showing up to 12 matches.</p>`}
+function adminB(){const q=($('#sb')||{value:''}).value.toLowerCase(),r=S.bookings.filter(b=>(b.ref+b.email+b.pax.map(p=>p.name).join(' ')).toLowerCase().includes(q));
+ $('#bl').innerHTML=r.length?`<table class=tbl><tr><th>Ref</th><th>User</th><th>Route</th><th>Seats</th><th>Total</th></tr>${r.map(b=>`<tr><td>${b.ref}</td><td>${b.email}</td><td>${b.route}</td><td>${b.seats.join(', ')}</td><td>${inr(b.total)}</td></tr>`).join('')}</table>`:'<p class=mut>No bookings found.</p>'}
+async function saveF(){const o=$('#fo').value,d=$('#fd').value,t=$('#ft').value.split(':'),u=+$('#fu').value,p=+$('#fp').value;
+ if(o===d||t.length<2||!(u>0)||!(p>0)){S.err='Choose different airports and enter valid time, duration and fare.';return render()}
+ try{await api(S.edit?'/api/admin/flights/'+S.edit.id:'/api/admin/flights',{method:S.edit?'PUT':'POST',body:{o,d,al:$('#fa').value,dep:+t[0]*60+ +t[1],dur:u,price:p}});S.edit=null;go('admin')}catch(e){S.err=e.message;render()}}
+function editF(id){S.edit=S.flights.find(f=>f.id===id);render();window.scrollTo(0,300)}
+async function delF(id){if(confirm('Delete this flight?')){try{await api('/api/admin/flights/'+id,{method:'DELETE'});go('admin')}catch(e){S.err=e.message;render()}}}
+render();
+</script></body></html>
